@@ -1,0 +1,21 @@
+#PBS -q class_short16 
+#PBS -l nodes=12:sixcore
+#PBS -l walltime=00:01:00
+#PBS -N testResult
+
+export OMPI_MCA_mpi_yield_when_idle=0
+cd $PBS_O_WORKDIR
+
+
+echo "*** STARTED: `date` on `hostname` ***"
+echo $PWD
+cat $PBS_NODEFILE
+echo -e "\n\n"
+
+# Run the program
+#/opt/openmpi-1.4.3-gcc44/bin/mpirun --hostfile mpd.hosts -np 3 ./test_mpi_mcs 100000
+/opt/openmpi-1.4.3-gcc44/bin/mpirun --hostfile $PBS_NODEFILE -np 96 ./test_mpi_t_barrier 100000
+#./test_omp_builtin 8 100000
+echo "*** COMPLETED: `date` on `hostname` ***"
+
+# eof
